@@ -1,10 +1,10 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : api.ai-baidu.cn
+Source Server         : 127.0.0.7
 Source Server Version : 50562
-Source Host           : 47.95.215.177:3306
-Source Database       : www_ai_baidu_cn
+Source Host           : 127.0.0.7:3306
+Source Database       : database
 
 Target Server Type    : MYSQL
 Target Server Version : 50562
