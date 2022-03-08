@@ -1,23 +1,4 @@
 <?php
-/**
- * +----------------------------------------------------------------------
- * | think-addons [thinkphp6]
- * +----------------------------------------------------------------------
- *  .--,       .--,             | FILE: helper.php
- * ( (  \.---./  ) )            | AUTHOR: by dreamlee
- *  '.__/o   o\__.'             | EMAIL: 1755773846@qq.com
- *     {=  ^  =}                | QQ: 1755773846
- *     /       \                | DATETIME: 2022/03/07 08:30
- *    //       \\               |
- *   //|   .   |\\              |
- *   "'\       /'"_.-~^`'-.     |
- *      \  _  /--'         `    |
- *    ___)( )(___               |-----------------------------------------
- *   (((__) (__)))              | 高山仰止,景行行止.虽不能至,心向往之。
- * +----------------------------------------------------------------------
- * | Copyright (c) 2022 http://www.zzstudio.net All rights reserved.
- * +----------------------------------------------------------------------
- */
 declare(strict_types=1);
 
 use think\facade\Event;
@@ -181,10 +162,10 @@ if (!function_exists('get_addons_list')) {
                 if(!get_addons_instance($name)) {
                     continue;
                 }
-                $class = get_addons_class($name);
-                if (!class_exists($class)) {
-                    continue;
-                }
+                // $class = get_addons_class($name);
+                // if (!class_exists($class)) {
+                //     continue;
+                // }
                 $addon_info = get_addons_instance($name)->getInfo();
                 //  判断单例插件的参数是否完整
                 if (!check_addons_Info($addon_info)) {

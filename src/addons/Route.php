@@ -4,10 +4,10 @@
  * | think-addons [thinkphp6]
  * +----------------------------------------------------------------------
  *  .--,       .--,             | FILE: Route.php
- * ( (  \.---./  ) )            | AUTHOR: by dreamlee
- *  '.__/o   o\__.'             | EMAIL: 1755773846@qq.com
- *     {=  ^  =}                | QQ: 1755773846
- *     /       \                | DATETIME: 2022/03/07 08:30
+ * ( (  \.---./  ) )            | AUTHOR: byron
+ *  '.__/o   o\__.'             | EMAIL: xiaobo.sun@qq.com
+ *     {=  ^  =}                | QQ: 150093589
+ *     /       \                | DATETIME: 2019/11/5 09:57
  *    //       \\               |
  *   //|   .   |\\              |
  *   "'\       /'"_.-~^`'-.     |
@@ -15,7 +15,7 @@
  *    ___)( )(___               |-----------------------------------------
  *   (((__) (__)))              | 高山仰止,景行行止.虽不能至,心向往之。
  * +----------------------------------------------------------------------
- * | Copyright (c) 2022 http://www.zzstudio.net All rights reserved.
+ * | Copyright (c) 2019 http://www.zzstudio.net All rights reserved.
  * +----------------------------------------------------------------------
  */
 declare(strict_types=1);
@@ -40,13 +40,10 @@ class Route
     {
         $app = app();
         $request = $app->request;
-		
         Event::trigger('addons_begin', $request);
-		
         if (empty($addon) || empty($controller) || empty($action)) {
             throw new HttpException(500, lang('addon can not be empty'));
         }
-		
         $request->addon = $addon;
         // 设置当前请求的控制器、操作
         $request->setController($controller)->setAction($action);
@@ -87,7 +84,6 @@ class Route
             throw new HttpException(404, lang('addon action %s not found', [get_class($instance).'->'.$action.'()']));
         }
         Event::trigger('addons_action_begin', $call);
-		
         return call_user_func_array($call, $vars);
     }
 }

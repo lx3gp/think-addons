@@ -1,13 +1,14 @@
 <?php
 /**
  * +----------------------------------------------------------------------
- * | think-addons [thinkphp6]
+ * | think-addons [基于 thinkphp6]
  * +----------------------------------------------------------------------
- *  .--,       .--,             | FILE: SendConfig.php
- * ( (  \.---./  ) )            | AUTHOR: by dreamlee
- *  '.__/o   o\__.'             | EMAIL: 1755773846@qq.com
- *     {=  ^  =}                | QQ: 1755773846
- *     /       \                | DATETIME: 2022/03/07 08:30
+ *  .--,       .--,             | FILE: config.php
+ * ( (  \.---./  ) )            | AUTHOR: byron sampson
+ *  '.__/o   o\__.'             | EMAIL: xiaobo.sun@qq.com
+ *     {=  ^  =}                | QQ: 150093589
+ *      >  -  <                 | WECHAT: wx5ini99
+ *     /       \                | DATETIME: 2019/10/29
  *    //       \\               |
  *   //|   .   |\\              |
  *   "'\       /'"_.-~^`'-.     |
@@ -15,10 +16,9 @@
  *    ___)( )(___               |-----------------------------------------
  *   (((__) (__)))              | 高山仰止,景行行止.虽不能至,心向往之。
  * +----------------------------------------------------------------------
- * | Copyright (c) 2022 http://www.zzstudio.net All rights reserved.
+ * | Copyright (c) 2019 http://www.zzstudio.net All rights reserved.
  * +----------------------------------------------------------------------
  */
-declare(strict_types=1);
 
 namespace think\addons\command;
 
@@ -41,7 +41,7 @@ class SendConfig extends Command
     public function execute(Input $input, Output $output)
     {
         //获取默认配置文件
-        $content = file_get_contents(root_path() . 'vendor/lx3gp/think-addons/src/config.php');
+        $content = file_get_contents(root_path() . 'vendor/zzstudio/think-addons/src/config.php');
 
         $configPath = config_path() . '/';
         $configFile = $configPath . 'addons.php';
