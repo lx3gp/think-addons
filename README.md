@@ -1,8 +1,13 @@
 # think-addons
 The ThinkPHP 6 Addons Package
 
-## 安装
+# 安装
+> gitee安装
+> git clone https://gitee.com/bleeld/think-addons.git
+
+> github/packageist仓库安装
 > composer require lx3gp/think-addons
+
 
 ## 配置
 
