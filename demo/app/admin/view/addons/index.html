@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html langue="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> -->
+	<title>基于thinkphp6的addons插件扩展 - ThinkPHP框架</title>
+	<meta name="keywords" content="thinkphp代码，代码示例，代码参考，php短信，数据库备份代码，令牌验证，去除代码中的空白和注释thinkphp6 插件 hook addons"/>
+	<meta name="description" content="提供各种官方和用户发布的代码示例，代码参考，欢迎大家交流学习"/>
+    <!-- 引入 layui.css -->
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+    
+    <!-- 引入 layui.js -->
+    <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+</head>
+<body>
+    <h1>插件列表</h1>
+    <div >
+        <table>
+            <th>
+                <td>序号</td>
+                <td>插件标识</td>
+                <td>插件名称</td>
+                <td>插件描述</td>
+                <td>插件版本</td>
+                <td>插件作者</td>
+                <td>插件安装</td>
+                <td>插件状态</td>
+                <td>操作</td>
+            </th>
+            <tbody>
+                {volist name="addons" id="addon" key="k" empty=""}
+                <tr>
+                    <td>{$k}</td>
+                    <td>{$addon['name']}</td>
+                    <td>{$addon['title']}</td>
+                    <td>{$addon['description']}</td>
+                    <td>{$addon['version']}</td>
+                    <td>{$addon['author']}</td>
+                    <td>{empty name="addon.isInstall"}未安装{else /}已安装{/empty}</td>
+                    <td>{empty name="addon.status"}未启用{else /}已启用{/empty}</td>
+                    <td>
+                        {empty name="addon.isInstall"}
+                        <a href="{:url('install',['name'=>$addon['name']])}">安装</a>
+                        {else /}
+                        <a href="{:url('uninstall',['name'=>$addon['name']])}">卸载</a>
+                        {empty name="addon.status"}
+                        <a href="{:url('switch',['name'=>$addon['name'], 'status'=>1])}">启用</a>
+                        {else /}
+                        <a href="{:url('switch',['name'=>$addon['name'], 'status'=>0])}">停用</a>
+                        {/empty}
+                        {/empty}
+                    </td>
+                </tr>
+                {/volist}
+            </tbody>
+
+        </table>
+    </div>
+    <button type="button" class="layui-btn" id="test1">
+        <i class="layui-icon">&#xe67c;</i>上传图片
+    </button>
+    <script>
+        layui.use('upload', function(){
+            var upload = layui.upload;
+          //执行实例
+            upload.render({
+                elem: '#test1'
+                ,url: '{:url(\'Addons/uploadFile\')}'
+                ,auto: true //选择文件后不自动上传
+                ,field: 'addons'
+                ,accept: 'file' //普通文件
+                ,exts: 'zip|rar|7z' //只允许上传压缩文件
+                ,done: function(res){
+                    layer.msg('上传成功');
+                    console.log(res)
+                }
+            });
+        });
+        </script>
+</body>
+
+</html>
