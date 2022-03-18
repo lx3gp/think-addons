@@ -40,7 +40,7 @@ class Service extends \think\Service
         $this->addons_path = $this->getAddonsPath();
         // 加载系统语言包
         Lang::load([
-            $this->app->getRootPath() . '/vendor/zzstudio/think-addons/src/lang/zh-cn.php'
+            $this->app->getRootPath() . '/vendor/lx3gp/think-addons/src/lang/zh-cn.php'
         ]);
         // 自动载入插件
         $this->autoload();
@@ -190,7 +190,7 @@ class Service extends \think\Service
             // 获取插件目录名
             $name = pathinfo($info['dirname'], PATHINFO_FILENAME);
             //  判断插件是否安装，只有安装的查看才有效  -   自定义的逻辑
-            if(!is_file($this->getAddonsPath() . $name . config('route.pathinfo_depr') . config('addons.conf_flag') . config('addons.conf_suffix'))){
+            if(!is_file($this->getAddonsPath() . $name . DIRECTORY_SEPARATOR . config('addons.conf_flag') . config('addons.conf_suffix'))){
                 continue;
             }
             // 找到插件入口文件

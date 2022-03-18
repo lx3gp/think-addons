@@ -12,85 +12,148 @@ class Plugin extends Addons	// 需继承think\Addons类
 {
     // 该插件的基础信息
     public $info = [
-        'name' => 'message',	// 插件标识
-        'title' => '留言插件',	// 插件名称
-        'description' => 'thinkph6留言插件',	// 插件简介
-        'status' => 1,	//插件运行状态，0 禁用，1 启用
-        'author' => 'by Dreamlee',
-        'version' => '0.1'
+        'name'  =>  'message', //  插件标识 
+        'title' =>  '留言插件', //  插件名称
+        'description'   =>  'ThinkPHP6留言插件',    //  插件简介
+        'status'    =>  0,  //  插件运行状态，0 禁用，1 启用
+        'source'    =>  0,  //  插件来源，0 本地插件，  1 在线插件
+        'author'    =>  'DreamLee',     //  插件作者
+        'version'   =>  '0.1'           //  插件版本
     ];
 
     /**
      * 插件安装方法
-     * @return bool
+     * @return array
      */
-    public function install()
+    public function install(string $name= null)
     {
-        //  重构配置文件
-        $config = $this->info;
-        $config['menu'] = [ //  建议结合auth权限中的role来设置项，同时的记得增加一项：position，用来表示显示位置
-            [
-                'name'  =>  '留言管理',
-                'url'   =>  addons_url('message://Index/index'),
-                'type'  =>  0,  //  0 菜单， 1 按钮
-                'position'  =>  0,  //  0 用户后台，1 管理员后台
-            ],
-        ];
+        if (!$name) {
+            return [
+                'code'  =>  400,
+                'msg'   =>  '请指定插件名称~',
+                'data'  =>  'database',
+            ];
+        }
         //  创建数据表  当前文件所在目录的上级目录dirname(dirname(__FILE__))
         try{
-            $sql_content = file_get_contents(dirname(__FILE__) . config('route.pathinfo_depr') . 'data/install.sql');
-            $sql_content = array_values(array_filter(explode(';', $sql_content)));
-            $sql_status = true;
-            foreach ($sql_content as $sql) {
-                $_step_status = true;
-                if(Db::execute($sql) !== false) {
-                    $_step_status = true;
-                }
-                $sql_status = $_step_status && $sql_status;
+            if(!create_table($name)){
+                return [
+                    'code'  =>  400,
+                    'msg'   =>  '数据库安装失败~',
+                    'data'  =>  'database',
+                ];
             }
-            //  判断是否安装失败
-            if( $sql_status === false ) {
-                return false;
-            }
-
-            //  返回配置文件写入的状态
-            return create_config($config);
         }catch(\Exception $e){
-            return false;
+            return [
+                'code'  =>  400,
+                'msg'   =>  '数据库安装失败~',
+                'data'  =>  'database',
+            ];
         }
+
+        //  安装标识文件    -   配置文件
+        try{
+            //  重构插件文件
+            $info = get_addons_info($name);
+            $info['isInstall'] = 1;
+            //  返回配置文件写入的状态
+            if(!set_addons_info($name, $info)){
+                return [
+                    'code'  =>  400,
+                    'msg'   =>  '标识文件写入失败~',
+                    'data'  =>  'ini',
+                ];
+            }
+        }catch(\Exception $e){
+            return [
+                'code'  =>  400,
+                'msg'   =>  $e->getMessage(),
+                'data'  =>  'ini',
+            ];
+        }
+        return [
+            'code'  =>  200,
+            'msg'   =>  '标识文件安装成功~',
+            'data'  =>  [],
+        ];
     }
 
     /**
      * 插件卸载方法
-     * @return bool
+     * @return array
      */
-    public function uninstall()
+    public function uninstall(string $name= null)
     {
+        if (!$name) {
+            return [
+                'code'  =>  400,
+                'msg'   =>  '请指定插件名称~',
+                'data'  =>  'database',
+            ];
+        }
+        if (!drop_table($name)) {   //  获取message插件所有的数据表，主要是根据安装文件来获取的
+            return [
+                'code'  =>  400,
+                'msg'   =>  '数据库删除失败~',
+                'data'  =>  'database',
+            ];
+        }
         //  删除数据表
-        $sql = "DROP TABLE IF EXISTS `tp_message`";
-        $sql_status = Db::execute($sql);
-        if($sql_status === false) {
-            return false;
+        try{
+            if (!drop_table($name)) {   //  获取message插件所有的数据表，主要是根据安装文件来获取的
+                return [
+                    'code'  =>  400,
+                    'msg'   =>  '数据库删除失败~',
+                    'data'  =>  'database',
+                ];
+            }
+        }catch(\Exception $e){
+            return [
+                'code'  =>  400,
+                'msg'   =>  '数据库删除失败~',
+                'data'  =>  'database',
+            ];
         }
-
-        //  删除标识文件
-        $addons_path = root_path() . config('route.pathinfo_depr') . "addons" . config('route.pathinfo_depr');
-        $config_file = $addons_path . $this->getName() . config('route.pathinfo_depr') . config('addons.conf_flag') . config('addons.conf_suffix');
-        if(!file_exists($config_file)){
-            return true;
+        //  删除配置文件    -   配置文件
+        try{
+            if (!remove_config($name)) {
+                return [
+                    'code'  =>  400,
+                    'msg'   =>  '标识文件删除失败~',
+                    'data'  =>  'config',
+                ];
+            }
+            //  调整插件信息
+            $info = get_addons_info($name);
+            $info['isInstall'] = 0;
+            //  返回配置文件写入的状态
+            if(!set_addons_info($name, $info)){
+                return [
+                    'code'  =>  400,
+                    'msg'   =>  '插件信息写入失败~',
+                    'data'  =>  'ini',
+                ];
+            }
+        }catch(\Exception $e){
+            return [
+                'code'  =>  400,
+                'msg'   =>  '配置文件删除失败~',
+                'data'  =>  'config',
+            ];
         }
-        if(!@unlink($config_file)){
-            return false;
-        }
-        return true;
+        return [
+            'code'  =>  200,
+            'msg'   =>  '数据库、配置文件、基础信息删除成功~',
+            'data'  =>  [],
+        ];
     }
 
     /**
-     * 实现的messagehook钩子方法
+     * 实现的messageHook钩子方法
      * @param $param 钩子被调用的前端传递给钩子的参数
      * @return mixed
      */
-    public function messagehook($param)
+    public function messageHook($param)
     {
 		// 调用钩子时候的参数信息
         print_r($param);
@@ -101,11 +164,11 @@ class Plugin extends Addons	// 需继承think\Addons类
     }
 
     /**
-     * 实现的messagelisthook钩子方法
+     * 实现的messageListHook钩子方法
      * @param $param 钩子被调用的前端传递给钩子的参数
      * @return mixed
      */
-    public function messagelisthook($param)
+    public function messageListHook($param)
     {
 		// 调用钩子时候的参数信息
         print_r($param);
@@ -120,5 +183,5 @@ class Plugin extends Addons	// 需继承think\Addons类
      * 数据库信息
      */
 
-    // id,name,phone,content,create_time,update_time,touid,
+
 }

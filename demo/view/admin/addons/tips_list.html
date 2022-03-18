@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html langue="zh-cn">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" /> -->
+        <title>基于thinkphp6的addons插件扩展 - ThinkPHP框架</title>
+        <meta name="keywords" content="thinkphp代码，代码示例，代码参考，php短信，数据库备份代码，令牌验证，去除代码中的空白和注释thinkphp6 插件 hook addons"/>
+        <meta name="description" content="提供各种官方和用户发布的代码示例，代码参考，欢迎大家交流学习"/>
+        <!-- 引入 layui.css -->
+        <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+        
+        <!-- 引入 layui.js -->
+        <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="__STATIC__/js/common.js"></script>
+    </head>
+    <body>
+        <div class="layui">
+            <blockquote class="layui-elem-quote">
+                本页面只是演示静态表格，如果你需要的是数据表格，可前往： <a class="layui-btn layui-btn-normal" href="/demo/table.html" target="_blank">表格模块示例</a>
+                <button type="button" class="layui-btn" id="test1">
+                    <i class="layui-icon">&#xe67c;</i>离线安装
+                </button>
+                <a type="button" class="layui-btn layui-btn-warm" href="{:url('uninstall_database_backup',['name'=>'message'])}">
+                    <i class="layui-icon layui-icon-transfer"></i>数据备份
+                </a>
+                <button type="button" class="layui-btn layui-btn-danger">
+                    <i class="layui-icon layui-icon-template"></i>数据还原
+                </button>
+                <button type="button" class="layui-btn layui-btn-primary layui-border-green" onClick="Util.adminL('添加配置', '{:url(\'addConfig\',[\'name\'=>$name])}', 800, 750)">
+                    <i class="layui-icon layui-icon-addition"></i>添加配置
+                </button>
+            </blockquote>
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;"> <legend>配置列表</legend></fieldset>
+            <div class="layui-form">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="60">
+                        <col width="150">
+                        <col width="200">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>标识</th>
+                            <th>名称</th>
+                            <th>类型</th>
+                            <th>分组</th>
+                            <th>默认值</th>                            
+                            <th>可选值</th>
+                            <th>验证规则</th>
+                            <th>错误提示</th>
+                            <th>填写提示</th>
+                            <th>扩展信息</th>                            
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {volist name="tipsList" id="tip" key="k" empty=""}
+                        <tr>
+                            <td>{$k}</td>
+                            <td>{$tip['name']}</td>
+                            <td>{$tip['title']}</td>
+                            <td>{$tip['type']}</td>
+                            <td>{present name="tip.group"}{$tip['group']}{/present}</td>
+                            <td>{present name="tip.value"}{$tip['value']}{/present}</td>                            
+                            <td>{present name="tip.content"}{$tip['content']}{/present}</td>
+                            <td>{present name="tip.rule"}{$tip['rule']}{/present}</td>
+                            <td>{present name="tip.msg"}{$tip['msg']}{/present}</td>
+                            <td>{present name="tip.tip"}{$tip['tip']}{/present}</td>
+                            <td>{empty name="tip.extend"}{else /}<a class="layui-btn layui-btn-sm" onclick="Util.adminX('{:url(\'install\',[\'name\'=>$tip[\'name\']])}')">查看</a>{/empty}</td>                            
+                            <td>
+                                <a class="layui-btn layui-btn-sm layui-btn-warm" title="配置" onclick="Util.adminL('调整配置', '{:url(\'setConfig\',[\'name\'=>$name, \'configKey\'=>$key, \'configName\'=>$tip[\'name\']])}', 800, 780)">配置</a>
+                                <a class="layui-btn layui-btn-sm layui-btn-danger" title="删除" onclick="Util.adminX('{:url(\'deleteConfig\',[\'name\'=>$name, \'configKey\'=>$key, \'configName\'=>$tip[\'name\']])}')">删除</a>
+                            </td>
+                        </tr>
+                        {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+            layui.use('upload', function(){
+                var $ = layui.jquery
+                    ,upload = layui.upload;
+                //执行实例
+                upload.render({
+                    elem: '#test1'
+                    ,url: '{:url(\'Addons/offlineInstall\')}'
+                    ,auto: true //选择文件后不自动上传
+                    ,field: 'addons'
+                    ,accept: 'file' //普通文件
+                    ,exts: 'zip|rar|7z' //只允许上传压缩文件
+                    ,done: function(res){
+                        layer.msg('上传成功');
+                        console.log(res)
+                    }
+                });
+            });
+
+        </script>
+    </body>
+</html>

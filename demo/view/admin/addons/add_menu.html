@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Layui</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+        <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+        <!-- 引入 layui.js -->
+        <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    </head>
+    <body>
+        <div class="layui-box layui-container">
+
+            <div style="padding: 20px; background-color: #FFF; overflow: hidden;"> 
+                <div class="layui-row layui-col-space15"> 
+                    <form class="layui-form" onsubmit="return false;">
+                        <div class="layui-col-md12 layui-col-lg12">
+                                <div class="layui-card">
+                                    <div class="layui-card-body">
+                                        <div class="layui-row layui-col-space10 layui-form-item">
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="username">父级节点</label>
+                                                <div class="layui-input-block">
+                                                    <select name="pid" lay-verify="">
+                                                        <option value="0">--根节点--</option>
+                                                        {volist name="authNodes" id="n"}
+                                                        <option {notempty name="n.access"}selected{/notempty} value="{$n['id']}">{$n['html']}{$n['title']}</option>
+                                                        {/volist}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="title">节点名称</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="title" name="title" lay-verify="required" placeholder="请输入节点中文名称" autocomplete="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-row layui-col-space10 layui-form-item">
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="name">节点路径</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="name" name="name" lay-verify="required" placeholder="请输入节点路径" autocomplete="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="repass">生效方式</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="type" value="1" title="即时生效" />
+                                                    <input type="radio" name="type" value="2" checked title="下次生效" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-row layui-form-item layui-col-space10">
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label">附加规则</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="condition" placeholder="权限附加规则，一般不填写，例如：score>250" autocomplete="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="repass">同步部署</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="isMenu" value="0" lay-filter="isMenu" checked title="按钮" />
+                                                    <input type="radio" name="isMenu" value="1" lay-filter="isMenu" title="菜单" />                                                
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="layui-row layui-form-item layui-col-space10" id="menuArea">
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label">控制单元</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="menuModule" id="menuModule" placeholder="请输入所属控制单元" autocomplete="off" class="layui-input" />
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="sort">图形标识</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="menuIcon" id="menuIcon" placeholder="请点击选择图形标识" autocomplete="off" class="layui-input input_select_icon" />
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="sort">默认排序</label>
+                                                <div class="layui-input-block">
+                                                    <input type="number" name="sort" id="sort" min="1" step="1" max="9999" placeholder="请输入排序" autocomplete="off" class="layui-input" value="100" />
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label">URL地址</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="menuUrl" id="menuUrl" placeholder="请输入访问的URL" autocomplete="off" class="layui-input" />
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="layui-row layui-form-item layui-col-space10">
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="repass">节点位置</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="position" id="position" value="1" lay-filter="position" checked title="前端" />
+                                                    <input type="radio" name="position" id="position" value="0" lay-filter="position" title="后端" />                                                
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="repass">URL类型</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="isIframe" id="isIframe" value="0" lay-filter="isIframe" checked title="普通窗口" />
+                                                    <input type="radio" name="isIframe" id="isIframe" value="1" lay-filter="isIframe" title="弹出窗口" />                                                
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="layui-row layui-form-item layui-col-space10 layui-hide" id="iframeArea">
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label" for="sort">弹窗宽度</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="iframeWidth" placeholder="请输入弹窗宽度" maxlength="16" autocomplete="off" class="layui-input" />
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-xs12 layui-col-md6 layui-col-lg6">
+                                                <label class="layui-form-label">弹窗高度</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="iframeHeight" placeholder="请输入弹窗高度" autocomplete="off" class="layui-input" />
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="layui-row layui-form-item layui-col-space10">
+                                            <div class="layui-col-xs12 layui-col-md12 layui-col-lg12">
+                                                <label class="layui-form-label" for="status">节点状态</label>
+                                                <div class="layui-input-block">
+                                                    <input type="radio" name="status" value="1" checked title="启用" />
+                                                    <input type="radio" name="status" value="0" title="暂停" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr style="height:1px" />
+                                        <div class="layui-row layui-form-item layui-col-space10">
+                                            <div class="layui-input-block">
+                                                <button class="layui-btn" lay-submit lay-filter="add">立即提交</button>
+                                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                            </div>
+                                        </div>                                            
+                                    </div>
+                                
+                                </div>
+                        </div>
+                    </form>
+
+                </div> 
+            </div>
+
+        </div>
+
+        <!-- 注意：如果你直接复制所有代码到本地，上述 JS 路径需要改成你本地的 -->
+        <script>
+            layui.use(['form', 'layedit', 'laydate'], function(){
+                var form = layui.form
+                ,layer = layui.layer;
+
+
+                //监听指定开关
+                form.on('switch(switchTest)', function(data){
+                    layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+                    offset: '6px'
+                    });
+                    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+                });
+
+				//	监听按钮【暂未启用】
+				// form.on('radio(isMenu)', function (data) {
+				// 	if(data.value==1){	//	菜单
+				// 		$("#menuArea").removeClass("layui-hide")
+				// 		$("#menuArea input").each(function(index, item){
+                //             if(item.getAttribute('type') == 'radio' || item.getAttribute('type') == 'checkbox'){
+                //                 item.setAttribute("name", item.getAttribute("lay-filter"))
+                //             }else{
+                //                 item.setAttribute("name", item.getAttribute("id"))                                
+                //             }
+				// 		})
+				// 	}else if(data.value==0){
+				// 		$("#menuArea").addClass("layui-hide")
+				// 		$("#menuArea input").each(function(index, item){
+				// 			item.removeAttribute("name")
+				// 		})
+				// 	}
+				// })
+
+                //  切换数据
+				form.on('radio(isIframe)', function (data) {
+					if(data.value==1){	//	菜单
+						$("#iframeArea").removeClass("layui-hide")
+						$("#iframeArea input").each(function(index, item){
+							item.setAttribute("name", item.getAttribute("id"))
+						})
+					}else if(data.value==0){
+						$("#iframeArea").addClass("layui-hide")
+						$("#iframeArea input").each(function(index, item){
+							item.removeAttribute("name")
+						})
+					}
+				})
+
+                //  监听提交
+                form.on('submit(add)', function (data) {
+                    // layer.open({
+                    //     title: "提交内容",
+                    //     content: '<pre style="background-color: #f2f2f2; padding: 10px; border-radius: 5px; font-family: Consolas;">' + JSON.stringify(data.field, null, 4) + "</pre>",
+                    // });
+                    // return false;
+					$.ajax({
+						type:"POST",
+						data:data.field,
+						url:"{:url('addMenu',['name'=>$name])}",
+						dataType:"json",
+						success:function(res){
+							if(res.code==200){
+								//发异步，把数据提交给php
+								layer.alert(res.msg, {icon: 6},function () {
+									// 获得frame索引
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.location.reload();//刷新父页面，注意一定要在关闭当前iframe层之前执行刷新
+									//关闭当前frame
+									parent.layer.close(index);
+								});
+							}else{
+								//发异步，把数据提交给php
+								layer.alert(res.msg, {icon: 2});
+							}
+						},
+						error:function(res){
+							layer.alert(res.msg, {icon: 2},function () {
+								// 获得frame索引
+								var index = parent.layer.getFrameIndex(window.name);
+								parent.location.reload();//刷新父页面，注意一定要在关闭当前iframe层之前执行刷新
+								//关闭当前frame
+								parent.layer.close(index);
+							})
+						}
+					})
+					return false
+                })
+
+                //表单赋值
+                layui.$('#LAY-component-form-setval').on('click', function(){
+                    form.val('example', {
+                    "username": "贤心" // "name": "value"
+                    ,"password": "123456"
+                    ,"interest": 1
+                    ,"like[write]": true //复选框选中状态
+                    ,"close": true //开关状态
+                    ,"sex": "女"
+                    ,"desc": "我爱 layui"
+                    });
+                });
+
+                //表单取值
+                layui.$('#LAY-component-form-getval').on('click', function(){
+                    var data = form.val('example');
+                    alert(JSON.stringify(data));
+                });
+
+            });
+        </script>
+    
+    </body>
+</html>

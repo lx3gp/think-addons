@@ -11,12 +11,13 @@ class Plugin extends Addons	// 需继承think\Addons类
 {
     // 该插件的基础信息
     public $info = [
-        'name' => 'test',	// 插件标识
-        'title' => '插件测试',	// 插件名称
-        'description' => 'thinkph6插件测试',	// 插件简介
-        'status' => 1,	// 状态
-        'author' => 'byron sampson',
-        'version' => '0.1'
+        'name'  =>  'test', //  插件标识 
+        'title' =>  '插件测试', //  插件名称
+        'description'   =>  'ThinkPHP6插件测试',    //  插件简介
+        'status'    =>  0,  //  插件运行状态，0 禁用，1 启用
+        'source'    =>  0,  //  插件来源，0 本地插件，  1 在线插件
+        'author'    =>  'DreamLee',     //  插件作者
+        'version'   =>  '0.1'           //  插件版本
     ];
 
     /**
@@ -25,7 +26,7 @@ class Plugin extends Addons	// 需继承think\Addons类
      */
     public function install()
     {
-        return true;
+        //  return true;
     }
 
     /**
@@ -34,7 +35,7 @@ class Plugin extends Addons	// 需继承think\Addons类
      */
     public function uninstall()
     {
-        return true;
+        //  return true;
     }
 
     /**

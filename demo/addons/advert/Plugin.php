@@ -11,12 +11,13 @@ class Plugin extends Addons	// 需继承think\Addons类
 {
     // 该插件的基础信息
     public $info = [
-        'name' => 'advert',	// 插件标识
-        'title' => '广告插件',	// 插件名称
-        'description' => 'thinkph6广告插件测试',	// 插件简介
-        'status' => 0,	// 状态
-        'author' => 'dreamlee',
-        'version' => '0.1'
+        'name'  =>  'advert', //  插件标识 
+        'title' =>  '广告插件', //  插件名称
+        'description'   =>  'ThinkPHP6广告插件',    //  插件简介
+        'status'    =>  0,  //  插件运行状态，0 禁用，1 启用
+        'source'    =>  0,  //  插件来源，0 本地插件，  1 在线插件
+        'author'    =>  'DreamLee',     //  插件作者
+        'version'   =>  '0.1'           //  插件版本
     ];
 
     /**
@@ -28,7 +29,7 @@ class Plugin extends Addons	// 需继承think\Addons类
         //  重构配置文件
         $config = $this->info;
         $config['menu'] = [];
-        return create_config($config);
+
     }
 
     /**
